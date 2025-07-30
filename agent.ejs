@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Agent Dashboard</title>
+    <link rel="stylesheet" href="/css/agent.css">
+</head>
+
+<body>
+    <h1>Welcome, <%= agentName %> (Agent)</h1>
+
+    <h2>Register a New Customer</h2>
+    <form method="POST" action="/agent/register-customer" style="margin-bottom: 20px;">
+        <label>Name:</label>
+        <input type="text" name="name" required />
+
+        <label>Phone Number:</label>
+        <input type="text" name="phnum" pattern="[0-9]{10}" title="Enter 10 digit phone number" required />
+
+        <label>Address:</label>
+        <input type="text" name="address" required />
+
+        <button type="submit">Register Customer</button>
+    </form>
+
+
+    <% if (selectedCustomer) { %>
+        <h2>Selected Customer: <%= selectedCustomer.name %> (Ph: <%= selectedCustomer.phnum %>)</h2>
+        <h3>Add Sweets to Their Cart</h3>
+        <% sweets.forEach(sweet=> { %>
+            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+                <h4>
+                    <%= sweet.name %> - ₹<%= sweet.price %>
+                </h4>
+                <p>
+                    <%= sweet.description %>
+                </p>
+                <img src="<%= sweet.image_url %>" width="80" />
+
+                <form action="/agent/add-to-cart" method="POST">
+                    <input type="hidden" name="customer_id" value="<%= selectedCustomer.id %>">
+                    <input type="hidden" name="sweet_id" value="<%= sweet.id %>">
+                    <button type="submit">Add to <%= selectedCustomer.name %>'s Cart</button>
+                </form>
+            </div>
+            <% }) %>
+                <% } %>
+
+</body>
+
+</html>
