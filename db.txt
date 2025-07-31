@@ -1,0 +1,42 @@
+
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE,
+  password VARCHAR(100),
+  address TEXT,
+  mobile VARCHAR(15),
+  role VARCHAR(20) DEFAULT 'user'
+);
+
+CREATE TABLE sweets (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  price DECIMAL(10, 2),
+  description TEXT
+);
+
+CREATE TABLE cart (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  sweet_id INTEGER REFERENCES sweets(id),
+  quantity INTEGER
+);
+
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  items JSONB,
+  transaction_id VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    phone TEXT UNIQUE NOT NULL,
+    address TEXT NOT NULL,
+    agent_id INTEGER REFERENCES users(id) ON DELETE SET NULL, -- The agent who added the customer
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

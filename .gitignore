@@ -1,0 +1,48 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv environment variables
+.env
+.env.*
+
+# Coverage reports
+coverage/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+
+# Database files (if using SQLite locally for testing)
+*.sqlite
+*.sqlite3
+
+# VSCode settings
+.vscode/
+
+# EJS cache (if any)
+*.ejs~
+
+# Uploaded files (if you store uploaded sweet images)
+uploads/
+
+# Postgres backups (optional)
+*.dump
+*.sql
+*.backup

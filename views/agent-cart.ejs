@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent Cart - Customer <%= customerId %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>🛒 Cart for Customer ID: <%= customerId %></h1>
+
+  <h2>Add Sweets to Cart</h2>
+  <div class="sweet-list">
+    <% sweets.forEach(sweet => { %>
+      <div class="sweet-card">
+        <img src="<%= sweet.image_url %>" alt="<%= sweet.name %>" width="120" />
+        <h3><%= sweet.name %></h3>
+        <p>₹<%= sweet.price %></p>
+        <form method="POST" action="/agent/cart/add/<%= customerId %>/<%= sweet.id %>">
+          <button type="submit">Add to Cart</button>
+        </form>
+      </div>
+    <% }) %>
+  </div>
+
+  <hr>
+
+  <h2>🧾 Customer Cart</h2>
+  <% if (cart.length === 0) { %>
+    <p>No items in cart.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Sweet</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% let total = 0; %>
+        <% cart.forEach(item => { 
+             const itemTotal = item.price * item.quantity;
+             total += itemTotal;
+        %>
+          <tr>
+            <td><%= item.name %></td>
+            <td>₹<%= item.price %></td>
+            <td><%= item.quantity %></td>
+            <td>₹<%= itemTotal %></td>
+            <td>
+              <form method="POST" action="/agent/cart/remove/<%= customerId %>/<%= item.sweet_id %>">
+                <button type="submit">Remove</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+        <tr>
+          <td colspan="3"><strong>Grand Total:</strong></td>
+          <td><strong>₹<%= total %></strong></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <form method="POST" action="/agent/order/checkout/<%= customerId %>">
+      <button type="submit">Place Order</button>
+    </form>
+  <% } %>
+
+  <br>
+  <a href="/agent">⬅ Back to Agent Dashboard</a>
+</body>
+</html>

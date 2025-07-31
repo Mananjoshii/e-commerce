@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/my-cart">My Cart</a></li>
+        </ul>
+        <div>
+            <% if (user) { %>
+                <form action="/logout" method="POST">
+                    <button type="submit">Logout</button>
+                </form>
+                <% } else { %>
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                    <% } %>
+
+        </div>
+    </nav>
+    <h1>SAHAKAR BHARTI</h1>
+    <div>
+        <h2>Welcome to Sahakar Bharti <%= user ? user.name : 'Guest' %>!
+        </h2>
+    </div>
+    <div>
+        <h3>Explore our collection of sweets.</h3>
+    </div>
+
+
+
+
+
+    <div>
+        <% sweets.forEach(sweet=> { %>
+            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+                <img src="<%= sweet.image_url %>" alt="<%= sweet.name %>"
+                    style="width: 150px; height: auto; display: block; margin-bottom: 10px;" />
+
+                <h2>
+                    <%= sweet.name %>
+                </h2>
+                <p>Price: ₹<%= sweet.price %>
+                </p>
+                <p>Description: <%= sweet.description %>
+                </p>
+
+                <form action="/add-to-cart" method="POST">
+                    <input type="hidden" name="sweet_id" value="<%= sweet.id %>">
+                    <button type="submit">Add to Cart</button>
+                </form>
+
+
+
+            </div>
+            <% }) %>
+
+    </div>
+
+</body>
+
+</html>

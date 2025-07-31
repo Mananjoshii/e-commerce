@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent Dashboard</title>
+    <link rel="stylesheet" href="/css/agent.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Agent Dashboard</h1>
+
+    <!-- ADD NEW CUSTOMER -->
+    <h2>Add New Customer</h2>
+    <form action="/agent/add-customer" method="POST">
+      <input type="text" name="name" placeholder="Customer Name" required>
+      <input type="text" name="phone" placeholder="Phone Number" required>
+      <input type="text" name="address" placeholder="Address" required>
+      <button class="btn" type="submit">Add Customer</button>
+    </form>
+
+    <!-- SELECT EXISTING CUSTOMER -->
+    <div class="customer-list">
+      <h2>Select a Customer</h2>
+      <form action="/agent/select-customer" method="POST">
+        <select name="customer_id" required>
+          <% customers.forEach(c => { %>
+            <option value="<%= c.id %>" <%= selectedCustomer && c.id == selectedCustomer.id ? 'selected' : '' %>>
+              <%= c.name %> - <%= c.phone %>
+            </option>
+          <% }) %>
+        </select>
+        <button class="btn" type="submit">Select</button>
+      </form>
+    </div>
+
+    <% if (selectedCustomer) { %>
+      <p><strong>Selected Customer:</strong> <%= selectedCustomer.name %></p>
+
+      <!-- LIST OF SWEETS -->
+      <div class="sweet-list">
+        <h2>Available Sweets</h2>
+        <% sweets.forEach(sweet => { %>
+          <div class="card">
+            <h3><%= sweet.name %></h3>
+            <img src="<%= sweet.image_url %>" alt="<%= sweet.name %>" width="100">
+            <p>Price: ₹<%= sweet.price %></p>
+            <form action="/agent/add-to-cart" method="POST" class="inline">
+              <input type="hidden" name="sweet_id" value="<%= sweet.id %>">
+              <input type="hidden" name="customer_id" value="<%= selectedCustomer.id %>">
+              <input type="number" name="quantity" value="1" min="1" required>
+              <button class="btn" type="submit">Add to Cart</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- CART -->
+      <div class="cart-section">
+        <h2>Cart for <%= selectedCustomer.name %></h2>
+        <% if (cart.length === 0) { %>
+          <p>Cart is empty</p>
+        <% } else { %>
+          <ul>
+            <% cart.forEach(item => { %>
+              <li>
+                <%= item.name %> - ₹<%= item.price %> × <%= item.quantity %> = ₹<%= item.price * item.quantity %>
+              </li>
+            <% }) %>
+          </ul>
+          <form action="/agent/place-order" method="POST">
+            <input type="hidden" name="customer_id" value="<%= selectedCustomer.id %>">
+            <button class="btn" type="submit">Place Order</button>
+          </form>
+        <% } %>
+      </div>
+    <% } %>
+
+  </div>
+</body>
+</html>

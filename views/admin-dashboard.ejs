@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN DASHBOARD</title>
+    <link rel="stylesheet" href="/css/style_admin.css">
+</head>
+<body>
+    <h1>ADMIN DASHBOARD</h1>
+
+<h2>Sweet Inventory</h2>
+<table>
+    <tr>
+        <th>ID</th><th>Name</th><th>Price</th><th>Image</th><th>Action</th>
+    </tr>
+    <% sweets.forEach(sweet => { %>
+        <tr>
+            <td><%= sweet.id %></td>
+            <td><%= sweet.name %></td>
+            <td>₹<%= sweet.price %></td>
+            <td><img src="<%= sweet.image_url %>" width="60" /></td>
+
+            <td>
+                <form action="/admin/delete-sweet/<%= sweet.id %>" method="POST" onsubmit="return confirm('Delete this sweet?');">
+                    <button>Delete</button>
+                </form>
+            </td>
+        </tr>
+    <% }) %>
+</table>
+
+<h3>Add New Sweet</h3>
+<form action="/admin/add-sweet" method="POST" enctype="multipart/form-data">
+    <input type="text" name="name" placeholder="Name" required />
+    <input type="number" name="price" placeholder="Price" required />
+    <input type="file" name="image" accept="image/*"  />
+    <button type="submit">Add</button>
+</form>
+
+<hr />
+<h2>Assign Agent</h2>
+<form action="/admin/add-agent" method="POST">
+    <input type="text" name="username" placeholder="Agent Username" required />
+    <input type="text" name="phnum" placeholder="Agent Mobile Number" required pattern="[0-9]{10}" />
+    <button type="submit">Add Agent</button>
+</form>
+
+
+
+<hr />
+
+<h2>Orders</h2>
+<table>
+    <tr>
+        <th>Order ID</th><th>User</th><th>Mobile</th><th>Sweet</th><th>Qty</th><th>Ordered On</th>
+    </tr>
+    <% orders.forEach(order => { %>
+        <tr>
+            <td><%= order.id %></td>
+            <td><%= order.username %></td>
+            <td><%= order.phnum %></td>
+            <td><%= order.sweetname %></td>
+            <td><%= order.quantity %></td>
+            <td><%= new Date(order.created_at).toLocaleString() %></td>
+        </tr>
+    <% }) %>
+</table>
+</body>
+</html>

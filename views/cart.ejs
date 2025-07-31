@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+
+<body>
+    <div class="cart-container">
+        <h2>Your Cart</h2>
+
+        <% if (cart.length === 0) { %>
+            <p>Your cart is empty.</p>
+        <% } else { %>
+            <% let total = 0; %>
+
+            <% cart.forEach(item => { %>
+                <div class="cart-item">
+                    <div>
+                        <img src="<%= item.image_url %>" alt="<%= item.name %>" style="width:100px;">
+                    </div>
+
+                    <div>
+                        <h3><%= item.name %></h3>
+                        <p>Price: ₹<%= item.price %></p>
+                        <p>
+                            Quantity:
+                            <form action="/my-cart/decrease/<%= item.sweet_id %>" method="POST" style="display:inline;">
+                                <button class="qty-btn">-</button>
+                            </form>
+
+                            <span><%= item.quantity %></span>
+
+                            <form action="/my-cart/add/<%= item.sweet_id %>" method="POST" style="display:inline;">
+                                <button class="qty-btn">+</button>
+                            </form>
+                        </p>
+
+                        <form action="/my-cart/remove/<%= item.sweet_id %>" method="POST">
+                            <button class="remove-btn">Remove Item</button>
+                        </form>
+                    </div>
+                </div>
+
+                <% total += item.price * item.quantity; %>
+            <% }); %>
+
+            <div class="cart-total">
+                <h3>Total: ₹<%= total %></h3>
+            </div>
+
+            <div class="cart-buttons">
+                <form action="/checkout" method="POST">
+                    <button class="checkout-btn" type="submit">Proceed to Payment</button>
+                </form>
+            </div>
+        <% } %>
+    </div>
+</body>
+
+</html>
